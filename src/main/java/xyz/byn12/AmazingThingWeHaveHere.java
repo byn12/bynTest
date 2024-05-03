@@ -1,4 +1,4 @@
-package xyz.byndev.template;
+package xyz.byn12;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

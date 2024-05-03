@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- Change to your own main package name. -->
-    <groupId>xyz.byndev</groupId>
+    <groupId>xyz.byn12</groupId>
 
     <!-- Change to your plugin name, must be lower cased and match your end package name. No spaces. -->
     <artifactId>byntest</artifactId>
@@ -21,10 +21,10 @@
     <properties>
 
         <!-- Change to your name or the main project author. -->
-        <author>bynDev</author>
+        <author>byn12</author>
 
         <!-- Change to the full path where your main plugin class is located. -->
-        <main.class>xyz.byndev.template.AmazingThingWeHaveHere</main.class>
+        <main.class>xyz.byn12.AmazingThingWeHaveHere</main.class>
 
         <!-- Change the Java version this plugin is built on.
 
