@@ -64,7 +64,13 @@ public final class AmazingThingWeHaveHere extends SimplePlugin {
 
 		if (event.getHand() == EquipmentSlot.HAND) {
 			event.getRightClicked().setFireTicks(40 * 4);
-			Bukkit.broadcastMessage("Test2");
+			Bukkit.broadcastMessage("Test2a");
+
+			byte i = 0;
+			for (Player p : Bukkit.getOnlinePlayers()) {
+				i++;
+			}
+			Bukkit.broadcastMessage("Online: " + Bukkit.getOnlinePlayers().size());
 
 		}
 
