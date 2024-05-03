@@ -1,0 +1,4 @@
+command /bro:
+    trigger:
+        kill all players
+        brodcast "haha"
