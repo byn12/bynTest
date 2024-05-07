@@ -1,10 +1,17 @@
 package xyz.byn12;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 import org.mineacademy.fo.plugin.SimplePlugin;
 
 /**
@@ -59,23 +66,55 @@ public final class AmazingThingWeHaveHere extends SimplePlugin {
 	 * @param event
 	 */
 	@EventHandler
-	public void onRightClick(PlayerInteractEntityEvent event) {
+	public void onRightClick(PlayerInteractEvent event) {
 		Player player = event.getPlayer();
 
-		if (event.getHand() == EquipmentSlot.HAND) {
-			event.getRightClicked().setFireTicks(40 * 4);
-			Bukkit.broadcastMessage("Test2a");
-
-			byte i = 0;
-			for (Player p : Bukkit.getOnlinePlayers()) {
-				i++;
-			}
-			Bukkit.broadcastMessage("Online: " + Bukkit.getOnlinePlayers().size());
+		if (event.getHand() == EquipmentSlot.HAND && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+			Bukkit.broadcastMessage(setBlockType(event.getClickedBlock(), player));
 
 		}
 
 		// event.getRightClicked().getWorld().createExplosion(event.getRightClicked().getLocation(), 100);
 
+	}
+
+	@EventHandler
+	public void onMine(BlockBreakEvent event) {
+		Player player = event.getPlayer();
+		Block block = event.getBlock();
+		ItemStack[] drops = block.getDrops().toArray(new ItemStack[0]);
+		try {
+			block.getWorld().dropItem(block.getLocation().add(0.5, 1, 0.5), drops[0]).setVelocity(new Vector(0, 0, 0));
+		} catch (Exception e) {
+			System.out.println("There was an error: " + e);
+		}
+		event.setCancelled(true);
+		iWasJustMined(block);
+	}
+
+	void iWasJustMined(Block mined) {
+		Material oldBlock = mined.getType();
+		mined.setType(Material.BEDROCK);
+		Bukkit.getScheduler().runTaskLater(getInstance(), () -> {
+			if (!oldBlock.equals(Material.BEDROCK))
+				mined.setType(oldBlock);
+			else
+				System.out.println("Tried breaking bedrock.");
+		}, 60);
+	}
+
+
+	String setBlockType(Block block, Player player) {
+		try {
+			Material material = player.getInventory().getItemInMainHand().getType();
+			String oldBlock = block.getType().name();
+			block.setType(material);
+
+			return "Block was set from " + WordUtils.capitalizeFully(oldBlock.replace("_", " ")) + " to " + WordUtils.capitalizeFully(material.name().replace("_", " "));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	/* ------------------------------------------------------------------------------- */
@@ -92,4 +131,5 @@ public final class AmazingThingWeHaveHere extends SimplePlugin {
 	public static AmazingThingWeHaveHere getInstance() {
 		return (AmazingThingWeHaveHere) SimplePlugin.getInstance();
 	}
+
 }
